@@ -1,70 +1,29 @@
 "use client";
 
-import React from "react";
+import { React, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FollowerPointerCard } from "@/components/ui/following-pointer";
 
 export default function OurCourses() {
-  const courses = [
-    {
-      id: 1,
-      title: "Introduction to React",
-      description:
-        "Learn the basics of React, including components, props, and state management.",
-      videoUrl: "https://player.vimeo.com/video/1034735109",
-      thumbnail: "/Banner1.png",
-    },
-    {
-      id: 2,
-      title: "HTML Tutorial for Beginners",
-      description: "Complete HTML tutorial.",
-      videoUrl: "https://player.vimeo.com/video/1034735109",
-      thumbnail: "/Banner1.png",
-    },
-    {
-      id: 3,
-      title: "HTML Tutorial for Beginners",
-      description: "Complete HTML tutorial.",
-      videoUrl: "https://player.vimeo.com/video/1034735109",
-      thumbnail: "/Banner1.png",
-    },
-    {
-      id: 4,
-      title: "HTML Tutorial for Beginners",
-      description: "Complete HTML tutorial.",
-      videoUrl: "https://player.vimeo.com/video/1034735109",
-      thumbnail: "/Banner1.png",
-    },
-    {
-      id: 5,
-      title: "HTML Tutorial for Beginners",
-      description: "Complete HTML tutorial.",
-      videoUrl: "https://player.vimeo.com/video/1034735109",
-      thumbnail: "/Banner1.png",
-    },
-    {
-      id: 6,
-      title: "HTML Tutorial for Beginners",
-      description: "Complete HTML tutorial.",
-      videoUrl: "https://player.vimeo.com/video/1034735109",
-      thumbnail: "/Banner1.png",
-    },
-    {
-      id: 7,
-      title: "HTML Tutorial for Beginners",
-      description: "Complete HTML tutorial.",
-      videoUrl: "https://player.vimeo.com/video/1034735109",
-      thumbnail: "/Banner1.png",
-    },
-    {
-      id: 8,
-      title: "HTML Tutorial for Beginners",
-      description: "Complete HTML tutorial.",
-      videoUrl: "https://player.vimeo.com/video/1034735109",
-      thumbnail: "/Banner1.png",
-    },
-  ];
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/getPlaylistInfo");
+        if (!response.ok) {
+          throw new Error("Failed to fetch Playlist");
+        }
+        const data = await response.json();
+        setCourses(data);
+      } catch (error) {
+        console.error("Error fetching Playlist:", error);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   return (
     <div className="w-full dark:bg-black bg-white dark:bg-grid-white/[0.2] bg-grid-black/[0.1] relative flex items-center justify-center border-b w-[96%] mx-auto">
@@ -80,7 +39,7 @@ export default function OurCourses() {
         <div className="space-y-10 md:space-y-20">
           {courses.map((course, index) => (
             <motion.div
-              key={course.id}
+              key={course._id}
               className={`md:flex ${
                 index % 2 === 0 ? "flex-row" : "flex-row-reverse"
               } gap-8`}
@@ -99,28 +58,12 @@ export default function OurCourses() {
                     title={<TitleComponent title={course.title} />}
                   >
                     <img
-                      src={course.thumbnail}
-                      alt={`${course.title} thumbnail`}
-                      className="w-[500px]  rounded-2xl border-2 border-gray-200 shadow-2xl transition ease-out hover:scale-110"
+                      src={course.ImagePath}
+                      alt={`${course.title} Image`}
+                      className="w-[700px]  rounded-2xl border-2 border-gray-200 shadow-2xl transition ease-out hover:scale-110"
                     />
                   </FollowerPointerCard>
                 </Link>
-              </motion.div>
-              <motion.div
-                className="w-full flex items-center justify-center h-full"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.2 + 0.2 }}
-              >
-                <FollowerPointerCard
-                  title={<TitleComponent title={course.title} />}
-                >
-                  <img
-                    src={course.thumbnail}
-                    alt={`${course.title} thumbnail`}
-                    className="w-[500px] rounded-2xl border-2 border-gray-200 shadow-2xl transition ease-out hover:scale-110"
-                  />
-                </FollowerPointerCard>
               </motion.div>
             </motion.div>
           ))}

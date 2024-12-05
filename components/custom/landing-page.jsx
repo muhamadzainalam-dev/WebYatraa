@@ -388,7 +388,7 @@ export default function LandingPage() {
                   </ul>
                 </CardContent>
                 <CardContent>
-                  <Link href="/pages/CoursesVideoPage">
+                  <Link href="/pages/OurCourses">
                     <Button className="w-full">Explore Courses</Button>
                   </Link>
                 </CardContent>
