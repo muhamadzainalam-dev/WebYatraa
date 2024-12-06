@@ -106,7 +106,6 @@ export default function CoursesVideoPage() {
   const [courses, setCourses] = useState([]);
   const [playingVideoId, setPlayingVideoId] = useState(null);
 
-  // Fetch video data from the API
   useEffect(() => {
     const fetchCourses = async () => {
       try {
