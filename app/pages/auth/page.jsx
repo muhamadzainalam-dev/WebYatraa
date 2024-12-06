@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LockIcon, MailIcon, UserIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function AuthPage() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -101,10 +102,10 @@ export default function AuthPage() {
 
   return (
     <div className="flex items-center justify-center py-[20%]">
-      <div className="max-w-md w-[90%] space-y-8 p-8 bg-black rounded-xl shadow-lg">
+      <div>
         {!isAuthenticated ? (
           <>
-            <div className="text-center">
+            <div className="text-center max-w-md w-[90%] space-y-8 p-8 bg-black rounded-xl shadow-lg">
               <h2 className="mt-6 text-3xl font-bold text-white">
                 {isLogin ? "LOGIN" : "SIGNUP"}
               </h2>
@@ -203,14 +204,28 @@ export default function AuthPage() {
             </p>
           </>
         ) : (
-          <div className="text-center">
-            <Button
-              className="w-full bg-red-600 hover:bg-red-700 text-white"
-              onClick={handleLogout}
-            >
-              Sign Out
-            </Button>
-          </div>
+          <Card className="w-80 bg-white/80 border-black/20 backdrop-blur-lg">
+            <CardContent className="flex flex-col items-center space-y-4 p-6">
+              <Avatar className="w-24 h-24">
+                <AvatarImage
+                  src="/placeholder.svg?height=96&width=96"
+                  alt="User"
+                />
+                <AvatarFallback>UN</AvatarFallback>
+              </Avatar>
+              <div className="text-center">
+                <h2 className="text-xl font-semibold text-black">User Name</h2>
+                <p className="text-sm text-gray-900">user@example.com</p>
+              </div>
+              <Button
+                variant="outline"
+                className="w-full mt-4"
+                onClick={handleLogout}
+              >
+                Sign Out
+              </Button>
+            </CardContent>
+          </Card>
         )}
       </div>
     </div>

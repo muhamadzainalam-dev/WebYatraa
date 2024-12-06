@@ -4,14 +4,25 @@ import { TbUserSquareRounded } from "react-icons/tb";
 import { Input } from "@/components/ui/input";
 import { Search, BookOpen, Menu, ChevronLeft, ChevronDown } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navbar() {
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem("token_id");
     setIsAuthenticated(!!token);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token_id");
+    setIsAuthenticated(false);
+    router.push("/pages/auth");
+  };
 
   return (
     <header className="md:fixed sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-5">
@@ -88,11 +99,43 @@ export default function Navbar() {
               </Button>
             </nav>
           ) : (
-            <Link href="/pages/auth">
-              <div className="flex items-center">
-                <TbUserSquareRounded className="text-4xl cursor-pointer" />
-              </div>
-            </Link>
+            <div>
+              <TbUserSquareRounded
+                onClick={toggleVisibility}
+                className="text-4xl"
+                aria-label={
+                  isVisible
+                    ? "Hide account information"
+                    : "Show account information"
+                }
+              ></TbUserSquareRounded>
+              {isVisible && (
+                <Card className="absolute top-[20rem] right-[30rem] w-80 bg-white/80 border-black/20 backdrop-blur-lg">
+                  <CardContent className="flex flex-col items-center space-y-4 p-6">
+                    <Avatar className="w-24 h-24">
+                      <AvatarImage
+                        src="/placeholder.svg?height=96&width=96"
+                        alt="User"
+                      />
+                      <AvatarFallback>UN</AvatarFallback>
+                    </Avatar>
+                    <div className="text-center">
+                      <h2 className="text-xl font-semibold text-black">
+                        User Name
+                      </h2>
+                      <p className="text-sm text-gray-900">user@example.com</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="w-full mt-4"
+                      onClick={handleLogout}
+                    >
+                      Sign Out
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           )}
         </div>
       </div>
